@@ -1,20 +1,24 @@
 const express = require("express")
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+const Contacto = require('./Api/contacto')
 const app = express()
 
+
+app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
-app.get('/',(req,res)=>{
-    const usuario = {nombre: "Yeferson", apellido:"Rubio"}
-    res.json(usuario)
-})
-app.post('/adduser',(req,res)=>{
-    const usuario = req.body
-    usuario.nombre = usuario.nombre
-    usuario.telefono = "809-223-5612"
-    res.json(usuario)
-})
-app.listen(3000,()=>{
-    console.log("Ya se creo el server")
-})
+
+app.use('/',Contacto)
+
+mongoose.connect(
+    "mongodb://localhost/27017",
+    {useNewUrlParser: true},
+    (err,res)=>{
+        err && console.log("Error")
+        app.listen(3001,()=>{
+            console.log("Server esta corriendo en el puerto ",3001)
+        })
+    }
+)
 
